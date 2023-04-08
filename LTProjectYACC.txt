@@ -1,0 +1,72 @@
+%{
+/* Definition section */
+#include<stdio.h>
+int flag=0;
+%}
+
+%token NUMBER
+
+%left '+' '-'
+
+%left '*' '/' '%'
+
+%left '(' ')'
+
+/* Rule Section */
+%%
+
+ArithmeticExpression: E{
+
+		printf("\nResult=%d\n", $$);
+
+		return 0;
+
+		};
+E:
+
+ '-' NUMBER { $$=fibo($2);}
+
+|'*' NUMBER { float temp=($2)*($2); $$=temp;}
+
+|'/' NUMBER NUMBER{ $$=fact($2);}
+
+|'&' NUMBER { float temp=(0.5)*(3.14)*($2)*($2); $$=temp;}
+
+|'('E')' {$$=$2;}
+
+| '+' NUMBER { float temp=(3.14)*($2)*($2); $$=temp;}
+
+;
+
+
+%%
+
+int fibo(int n)
+{
+	if(n<=1)
+		return n;
+	else
+		return fibo(n-1)+fibo(n-2);
+}
+
+int fact(int n){
+	if(n<=1)
+		return 1;
+	return n*fact(n-1);
+}
+
+//driver code
+void main()
+{
+printf("\nEnter Any Arithmetic Expression of which you want to find the area\npress '+' for circle\npress '-' for Fibonacci\npress '*' for Square\npress '/' for Factorial\npress '&' for Semicircle \n");
+
+yyparse();
+if(flag==0)
+printf("\nEntered arithmetic expression is Valid\n\n");
+}
+
+void yyerror()
+{
+printf("\nEntered arithmetic expression is Invalid\n\n");
+flag=1;
+}
